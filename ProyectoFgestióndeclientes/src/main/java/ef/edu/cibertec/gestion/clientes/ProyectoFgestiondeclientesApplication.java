@@ -1,4 +1,4 @@
-package com.example.demo;
+package ef.edu.cibertec.gestion.clientes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
