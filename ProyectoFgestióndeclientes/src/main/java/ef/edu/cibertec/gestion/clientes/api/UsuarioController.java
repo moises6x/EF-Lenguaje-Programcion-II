@@ -26,9 +26,10 @@ public class UsuarioController {
 
     // 🟢 Listar todos los usuarios
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public ResponseEntity<List<?>> listarUsuarios() {
+        return ResponseEntity.ok(List.of()); // 🔒 devuelve una lista vacía
     }
+
 
     // 🔵 Obtener un usuario por ID
     @GetMapping("/{id}")

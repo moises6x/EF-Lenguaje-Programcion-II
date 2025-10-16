@@ -60,8 +60,7 @@ public class DetallePedidoController {
                     detalle.setPedido(cambios.getPedido());
                     detalle.setProducto(cambios.getProducto());
                     detalle.setCantidad(cambios.getCantidad());
-                    detalle.setPrecioUnitario(cambios.getPrecioUnitario());
-                    detalle.setSubtotal(cambios.getSubtotal());
+                
                     return ResponseEntity.ok(repository.save(detalle));
                 }).orElse(ResponseEntity.notFound().build());
     }

@@ -47,5 +47,7 @@ public class Direccion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false,
         foreignKey = @ForeignKey(name = "fk_direccion_cliente"))
+    @com.fasterxml.jackson.annotation.JsonBackReference
     private Cliente cliente;
+
 }

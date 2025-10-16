@@ -1,55 +1,30 @@
 package ef.edu.cibertec.gestion.clientes.entity;
 
 import java.math.BigDecimal;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Table(name = "Detalle_Pedido")
+@Table(name = "DetallePedido")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class DetallePedido {
-	 @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    @Column(name = "id_detalle")
-	    private Integer id;
 
-	    @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "id_pedido", nullable = false,
-	        foreignKey = @ForeignKey(name = "fk_detalle_pedido"))
-	    private Pedido pedido;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_detalle")
+    private Integer id;
 
-	    @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "id_producto", nullable = false,
-	        foreignKey = @ForeignKey(name = "fk_detalle_producto"))
-	    private Producto producto;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_pedido", nullable = false)
+    @JsonBackReference("pedido-detalle")
+    private Pedido pedido;
 
-	    @NotNull
-	    @Min(1)
-	    private Integer cantidad;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_producto", nullable = false)
+    @JsonBackReference("producto-detalle")
+    private Producto producto;
 
-	    @NotNull
-	    @DecimalMin("0.00")
-	    @Column(name = "precio_unitario")
-	    private BigDecimal precioUnitario;
-
-	    @NotNull
-	    @DecimalMin("0.00")
-	    private BigDecimal subtotal;
+    private Integer cantidad;
+    private BigDecimal subtotal;
 }

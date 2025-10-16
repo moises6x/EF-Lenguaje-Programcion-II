@@ -63,7 +63,7 @@ public class ClienteController {
                     c.setDni(cambios.getDni());
                     c.setTelefono(cambios.getTelefono());
                     c.setDirecciones(cambios.getDirecciones());
-                    c.setPedidos(cambios.getPedidos());
+                
                     return ResponseEntity.ok(repository.save(c));
                 }).orElse(ResponseEntity.notFound().build());
     }
