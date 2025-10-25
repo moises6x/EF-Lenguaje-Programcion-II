@@ -1,14 +1,14 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
-import java.time.LocalDateTime;
+import java.net.URI;
 import java.util.List;
-
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ef.edu.cibertec.gestion.clientes.entity.Pedido;
-import ef.edu.cibertec.gestion.clientes.repository.PedidoRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.PedidoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.PedidoResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,71 +19,50 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PedidoController {
 
-    private final PedidoRepository repository;
+    private final PedidoService service;
 
-    // 🟢 Crear un nuevo pedido
     @PostMapping
-    public ResponseEntity<Pedido> crear(@Valid @RequestBody Pedido pedido) {
+    public ResponseEntity<PedidoResponseDto> crear(@Valid @RequestBody PedidoRequestDto request) {
         log.info("POST /api/pedidos");
-
-        // Si no se envía una fecha, se asigna la actual automáticamente
-        if (pedido.getFechaPedido() == null) {
-            pedido.setFechaPedido(LocalDateTime.now());
-        }
-
-        Pedido saved = repository.save(pedido);
-        return ResponseEntity.ok(saved);
+        PedidoResponseDto saved = service.crear(request);
+        return ResponseEntity.created(URI.create("/api/pedidos/" + saved.getId())).body(saved);
     }
 
-    // 🟢 Listar todos los pedidos
     @GetMapping
-    public List<Pedido> listar() {
+    public List<PedidoResponseDto> listar() {
         log.info("GET /api/pedidos");
-        return repository.findAll();
+        return service.listar();
     }
 
-    // 🟢 Obtener un pedido por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> obtener(@PathVariable Integer id) {
+    public PedidoResponseDto obtener(@PathVariable Integer id) {
         log.info("GET /api/pedidos/{}", id);
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return service.obtener(id);
     }
 
-    // 🟢 Listar pedidos por cliente
     @GetMapping("/cliente/{idCliente}")
-    public List<Pedido> listarPorCliente(@PathVariable Integer idCliente) {
+    public List<PedidoResponseDto> listarPorCliente(@PathVariable Integer idCliente) {
         log.info("GET /api/pedidos/cliente/{}", idCliente);
-        return repository.findByClienteId(idCliente);
+        return service.listarPorClienteId(idCliente);
     }
 
-    // 🟢 Listar pedidos por estado (Ej: Pendiente, Completado, Cancelado)
     @GetMapping("/estado/{estado}")
-    public List<Pedido> listarPorEstado(@PathVariable String estado) {
+    public List<PedidoResponseDto> listarPorEstado(@PathVariable String estado) {
         log.info("GET /api/pedidos/estado/{}", estado);
-        return repository.findByEstado(estado);
+        return service.listarPorEstado(estado);
     }
 
-    // 🔴  Actualizar un pedido existente
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> actualizar(@PathVariable Integer id, @Valid @RequestBody Pedido cambios) {
+    public PedidoResponseDto actualizar(@PathVariable Integer id,
+                                        @Valid @RequestBody PedidoRequestDto request) {
         log.info("PUT /api/pedidos/{}", id);
-        return repository.findById(id)
-                .map(pedido -> {
-                    pedido.setCliente(cambios.getCliente());
-                    pedido.setEstado(cambios.getEstado());
-                    pedido.setTotal(cambios.getTotal());
-                    pedido.setDetalles(cambios.getDetalles());
-                    return ResponseEntity.ok(repository.save(pedido));
-                }).orElse(ResponseEntity.notFound().build());
+        return service.actualizar(id, request);
     }
 
-    // 🔴  Eliminar un pedido
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         log.info("DELETE /api/pedidos/{}", id);
-        repository.deleteById(id);
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }

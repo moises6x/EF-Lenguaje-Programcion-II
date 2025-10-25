@@ -1,12 +1,14 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ef.edu.cibertec.gestion.clientes.entity.Direccion;
-import ef.edu.cibertec.gestion.clientes.repository.DireccionRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.DireccionRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.DireccionResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.DireccionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,54 +19,46 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class DireccionController {
 
-    private final DireccionRepository repository;
+    private final DireccionService service;
 
     @PostMapping
-    public ResponseEntity<Direccion> crear(@Valid @RequestBody Direccion direccion) {
+    public ResponseEntity<DireccionResponseDto> crear(@Valid @RequestBody DireccionRequestDto request) {
         log.info("POST /api/direcciones");
-        return ResponseEntity.ok(repository.save(direccion));
+        DireccionResponseDto saved = service.crear(request);
+        return ResponseEntity.created(URI.create("/api/direcciones/" + saved.getId())).body(saved);
     }
 
     @GetMapping
-    public List<Direccion> listar() {
+    public List<DireccionResponseDto> listar() {
         log.info("GET /api/direcciones");
-        return repository.findAll();
+        return service.listar();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Direccion> obtener(@PathVariable Integer id) {
+    public DireccionResponseDto obtener(@PathVariable Integer id) {
         log.info("GET /api/direcciones/{}", id);
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return service.obtener(id);
     }
 
     @GetMapping("/cliente/{idCliente}")
-    public List<Direccion> listarPorCliente(@PathVariable Integer idCliente) {
+    public List<DireccionResponseDto> listarPorCliente(@PathVariable Integer idCliente) {
         log.info("GET /api/direcciones/cliente/{}", idCliente);
-        return repository.findByClienteId(idCliente);
+        return service.listarPorClienteId(idCliente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Direccion> actualizar(@PathVariable Integer id, @Valid @RequestBody Direccion cambios) {
+    public DireccionResponseDto actualizar(@PathVariable Integer id,
+                                           @Valid @RequestBody DireccionRequestDto request) {
         log.info("PUT /api/direcciones/{}", id);
-        return repository.findById(id)
-                .map(d -> {
-                    d.setDireccion(cambios.getDireccion());
-                    d.setCiudad(cambios.getCiudad());
-                    d.setProvincia(cambios.getProvincia());
-                    d.setCodigoPostal(cambios.getCodigoPostal());
-                    d.setPais(cambios.getPais());
-                    return ResponseEntity.ok(repository.save(d));
-                }).orElse(ResponseEntity.notFound().build());
+        return service.actualizar(id, request);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         log.info("DELETE /api/direcciones/{}", id);
-        repository.deleteById(id);
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }
+
 

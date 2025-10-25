@@ -1,28 +1,28 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.DetallePedido;
+
 import java.util.List;
 
+import ef.edu.cibertec.gestion.clientes.api.request.DetallePedidoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.DetallePedidoResponseDto;
+
 public interface DetalleService {
-	
-	
-	
-	// Crear un nuevo detalle de pedido
-    DetallePedido crear(DetallePedido detallePedido);
+
+    // Crear un nuevo detalle de pedido
+    DetallePedidoResponseDto crear(DetallePedidoRequestDto request);
 
     // Listar todos los detalles de pedido
-    List<DetallePedido> listar();
+    List<DetallePedidoResponseDto> listar();
 
     // Obtener un detalle de pedido por ID
-    DetallePedido obtenerPorId(Integer id);
+    DetallePedidoResponseDto obtener(Integer id);
 
     // Listar detalles de un pedido específico
-    List<DetallePedido> listarPorPedidoId(Integer idPedido);
+    List<DetallePedidoResponseDto> listarPorPedido(Integer idPedido);
 
     // Actualizar un detalle de pedido
-    DetallePedido actualizar(Integer id, DetallePedido cambios);
+    DetallePedidoResponseDto actualizar(Integer id, DetallePedidoRequestDto request);
 
     // Eliminar un detalle de pedido
     void eliminar(Integer id);
-	
-
 }
+

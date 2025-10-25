@@ -1,28 +1,24 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.Producto;
+
+import java.math.BigDecimal;
 import java.util.List;
 
+import ef.edu.cibertec.gestion.clientes.api.request.ProductoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.ProductoResponseDto;
+
 public interface ProductoService {
-	
-	// Listar todos los productos
-    List<Producto> listarTodos();
 
-    // Obtener un producto por ID
-    Producto obtenerPorId(Integer id);
+    ProductoResponseDto crear(ProductoRequestDto request);
 
-    // Crear un nuevo producto
-    Producto crear(Producto producto);
+    List<ProductoResponseDto> listar();
 
-    // Actualizar un producto
-    Producto actualizar(Integer id, Producto producto);
+    ProductoResponseDto obtener(Integer id);
 
-    // Eliminar un producto
+    ProductoResponseDto actualizar(Integer id, ProductoRequestDto request);
+
     void eliminar(Integer id);
 
-    // Listar productos activos
-    List<Producto> listarActivos();
+    List<ProductoResponseDto> listarActivos();
 
-    // Buscar productos por rango de precio
-    List<Producto> findByRangoPrecio(double min, double max);
-
+    List<ProductoResponseDto> listarPorRangoPrecio(BigDecimal min, BigDecimal max);
 }

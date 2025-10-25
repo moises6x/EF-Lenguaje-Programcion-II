@@ -1,5 +1,8 @@
 package ef.edu.cibertec.gestion.clientes.api.handler;
 
+import java.util.Map;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,24 @@ public class GlobalExceptionHandler {
 	        .status(HttpStatus.INTERNAL_SERVER_ERROR) // 500
 	        .body(ErrorResponse.of("INTERNAL_ERROR", "Ocurrió un error inesperado"));
 	}
+
+	  @ExceptionHandler(IllegalArgumentException.class)
+	  public ResponseEntity<Map<String,Object>> handleIllegalArg(IllegalArgumentException ex) {
+	    return ResponseEntity.status(409).body(Map.of(
+	      "code","CONFLICT",
+	      "message", ex.getMessage(),
+	      "timestamp", java.time.OffsetDateTime.now().toString()
+	    ));
+	  }
+
+	  @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+	  public ResponseEntity<Map<String,Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+	    return ResponseEntity.status(409).body(Map.of(
+	      "code","CONSTRAINT_VIOLATION",
+	      "message","Violación de restricción (dni/correo duplicado).",
+	      "timestamp", java.time.OffsetDateTime.now().toString()
+	    ));
+	  }
 
 }
 

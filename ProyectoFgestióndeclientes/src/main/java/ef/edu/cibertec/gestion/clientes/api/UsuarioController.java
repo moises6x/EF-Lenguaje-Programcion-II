@@ -1,19 +1,18 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
-import java.time.LocalDateTime;
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ef.edu.cibertec.gestion.clientes.entity.Usuario;
-import ef.edu.cibertec.gestion.clientes.repository.UsuarioRepository;
-import ef.edu.cibertec.gestion.clientes.repository.RolRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.LoginRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.request.UsuarioRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.UsuarioResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
@@ -21,80 +20,59 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
-    private final RolRepository rolRepository;
+    private final UsuarioService service;
 
-    // 🟢 Listar todos los usuarios
+    // Listar (ahora sí devuelve usuarios)
     @GetMapping
-    public ResponseEntity<List<?>> listarUsuarios() {
-        return ResponseEntity.ok(List.of()); // 🔒 devuelve una lista vacía
+    public List<UsuarioResponseDto> listarUsuarios() {
+        log.info("GET /api/usuarios");
+        return service.listarUsuarios();
     }
 
-
-    // 🔵 Obtener un usuario por ID
+    // Obtener por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Integer id) {
-        return usuarioRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public UsuarioResponseDto obtenerUsuario(@PathVariable Integer id) {
+        log.info("GET /api/usuarios/{}", id);
+        return service.obtenerUsuario(id);
     }
 
-    // 🟡 Crear nuevo usuario
+    // Crear
     @PostMapping
-    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
-        if (usuarioRepository.existsByUsernameIgnoreCase(usuario.getUsername())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("El nombre de usuario ya está en uso.");
-        }
-
-        usuario.setFechaCreacion(LocalDateTime.now());
-        Usuario nuevoUsuario = usuarioRepository.save(usuario);
-        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+    public ResponseEntity<UsuarioResponseDto> crearUsuario(@Valid @RequestBody UsuarioRequestDto request) {
+        log.info("POST /api/usuarios");
+        UsuarioResponseDto saved = service.crearUsuario(request);
+        return ResponseEntity.created(URI.create("/api/usuarios/" + saved.getId())).body(saved);
     }
 
-    // 🟠 Actualizar usuario
+    // Actualizar
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario usuarioActualizado) {
-        return usuarioRepository.findById(id)
-                .map(u -> {
-                    u.setUsername(usuarioActualizado.getUsername());
-                    u.setPassword(usuarioActualizado.getPassword());
-                    u.setRoles(usuarioActualizado.getRoles());
-                    Usuario actualizado = usuarioRepository.save(u);
-                    return ResponseEntity.ok(actualizado);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public UsuarioResponseDto actualizarUsuario(@PathVariable Integer id,
+                                                @Valid @RequestBody UsuarioRequestDto request) {
+        log.info("PUT /api/usuarios/{}", id);
+        return service.actualizarUsuario(id, request);
     }
 
-    // 🔴 Eliminar usuario
+    // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
-        if (!usuarioRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        usuarioRepository.deleteById(id);
+        log.info("DELETE /api/usuarios/{}", id);
+        service.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 🟣 Buscar usuario por nombre
+    // Buscar por username
     @GetMapping("/buscar")
-    public ResponseEntity<Usuario> buscarPorNombre(@RequestParam String username) {
-        Optional<Usuario> usuario = usuarioRepository.findByUsernameIgnoreCase(username);
-        return usuario.map(ResponseEntity::ok)
-                      .orElse(ResponseEntity.notFound().build());
+    public UsuarioResponseDto buscarPorNombre(@RequestParam String username) {
+        log.info("GET /api/usuarios/buscar?username={}", username);
+        return service.buscarPorNombre(username);
     }
-    
- // 🟢 Login simple (validación por username y password)
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Usuario loginRequest) {
-        log.info("POST /api/usuarios/login");
 
-        return usuarioRepository.findByUsernameIgnoreCase(loginRequest.getUsername())
-                .filter(u -> u.getPassword().equals(loginRequest.getPassword()))
-                .map(u -> ResponseEntity.ok("✅ Login exitoso. Bienvenido " + u.getUsername() + "!"))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("❌ Credenciales inválidas. Verifique usuario o contraseña."));
+    // Login
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        log.info("POST /api/usuarios/login");
+        String result = service.login(loginRequest);
+        return ResponseEntity.ok(result);
     }
-    
 }
 

@@ -1,75 +1,77 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
-
-
+import java.math.BigDecimal;
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ef.edu.cibertec.gestion.clientes.entity.Producto;
-import ef.edu.cibertec.gestion.clientes.repository.ProductoRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.ProductoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.ProductoResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.ProductoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/productos")
 @RequiredArgsConstructor
 public class ProductoController {
 
-    private final ProductoRepository productoRepository;
+    private final ProductoService service;
 
-    // 🟢 Obtener todos los productos
+    // Listar
     @GetMapping
-    public List<Producto> listarTodos() {
-        return productoRepository.findAll();
+    public List<ProductoResponseDto> listarTodos() {
+        log.info("GET /api/productos");
+        return service.listar();
     }
 
-    // 🔵 Obtener un producto por ID
+    // Obtener por id
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> obtenerPorId(@PathVariable Integer id) {
-        Optional<Producto> producto = productoRepository.findById(id);
-        return producto.map(ResponseEntity::ok)
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+    public ProductoResponseDto obtenerPorId(@PathVariable Integer id) {
+        log.info("GET /api/productos/{}", id);
+        return service.obtener(id);
     }
 
-    // 🟡 Crear un nuevo producto
+    // Crear
     @PostMapping
-    public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
-        Producto nuevo = productoRepository.save(producto);
-        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
+    public ResponseEntity<ProductoResponseDto> crear(@Valid @RequestBody ProductoRequestDto request) {
+        log.info("POST /api/productos");
+        ProductoResponseDto saved = service.crear(request);
+        return ResponseEntity.created(URI.create("/api/productos/" + saved.getId())).body(saved);
     }
 
-    // 🟠 Actualizar un producto existente
+    // Actualizar
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable Integer id, @RequestBody Producto producto) {
-        return productoRepository.findById(id)
-                .map(existing -> {
-                    existing.setNombre(producto.getNombre());
-                    existing.setDescripcion(producto.getDescripcion());
-                    existing.setPrecio(producto.getPrecio());
-                    existing.setStock(producto.getStock());
-                    existing.setEstado(producto.getEstado());
-                    Producto actualizado = productoRepository.save(existing);
-                    return ResponseEntity.ok(actualizado);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ProductoResponseDto actualizar(@PathVariable Integer id,
+                                          @Valid @RequestBody ProductoRequestDto request) {
+        log.info("PUT /api/productos/{}", id);
+        return service.actualizar(id, request);
     }
 
-    // 🔴 Eliminar un producto por ID
+    // Eliminar
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Integer id) {
-        if (!productoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        productoRepository.deleteById(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        log.info("DELETE /api/productos/{}", id);
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 🟣 Buscar productos activos
+    // Activos
     @GetMapping("/activos")
-    public List<Producto> listarActivos() {
-        return productoRepository.findByEstado("Activo");
+    public List<ProductoResponseDto> listarActivos() {
+        log.info("GET /api/productos/activos");
+        return service.listarActivos();
+    }
+
+    // Por rango de precio
+    @GetMapping("/precio")
+    public List<ProductoResponseDto> listarPorRangoPrecio(@RequestParam BigDecimal min,
+                                                          @RequestParam BigDecimal max) {
+        log.info("GET /api/productos/precio?min={}&max={}", min, max);
+        return service.listarPorRangoPrecio(min, max);
     }
 }

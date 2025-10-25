@@ -1,14 +1,22 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
-import java.time.LocalDateTime;
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import ef.edu.cibertec.gestion.clientes.entity.Cliente;
-import ef.edu.cibertec.gestion.clientes.repository.ClienteRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.ClienteRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.request.ClienteUpdateDto;
+import ef.edu.cibertec.gestion.clientes.api.response.ClienteResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.ClienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,70 +27,46 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClienteController {
 
-    private final ClienteRepository repository;
+    private final ClienteService service;
 
-    // Crear cliente
     @PostMapping
-    public ResponseEntity<Cliente> crear(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteResponseDto> crear(@Valid @RequestBody ClienteRequestDto request) {
         log.info("POST /api/clientes");
-
-        // Establecer la fecha actual si no viene en el JSON
-        if (cliente.getFechaRegistro() == null) {
-            cliente.setFechaRegistro(LocalDateTime.now());
-        }
-
-        Cliente saved = repository.save(cliente);
-        return ResponseEntity.ok(saved);
+        ClienteResponseDto saved = service.crear(request);
+        return ResponseEntity.created(URI.create("/api/clientes/" + saved.getId())).body(saved);
     }
 
-    // Listar todos los clientes
     @GetMapping
-    public List<Cliente> listar() {
+    public List<ClienteResponseDto> listar() {
         log.info("GET /api/clientes");
-        return repository.findAll();
+        return service.listar();
     }
 
-    // Obtener un cliente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> obtener(@PathVariable Integer id) {
+    public ClienteResponseDto obtener(@PathVariable Integer id) {
         log.info("GET /api/clientes/{}", id);
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return service.obtener(id);
     }
 
-    // Actualizar un cliente
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> actualizar(@PathVariable Integer id, @Valid @RequestBody Cliente cambios) {
+    public ClienteResponseDto actualizar(@PathVariable Integer id,
+                                         @Valid @RequestBody ClienteUpdateDto request) { // <-- Usa el nuevo DTO
         log.info("PUT /api/clientes/{}", id);
-        return repository.findById(id)
-                .map(c -> {
-                    c.setNombre(cambios.getNombre());
-                    c.setApellido(cambios.getApellido());
-                    c.setCorreo(cambios.getCorreo());
-                    c.setDni(cambios.getDni());
-                    c.setTelefono(cambios.getTelefono());
-                    c.setDirecciones(cambios.getDirecciones());
-                
-                    return ResponseEntity.ok(repository.save(c));
-                }).orElse(ResponseEntity.notFound().build());
+        return service.actualizar(id, request);
     }
-
-    // Eliminar un cliente
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         log.info("DELETE /api/clientes/{}", id);
-        repository.deleteById(id);
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Buscar cliente por DNI
     @GetMapping("/dni/{dni}")
-    public ResponseEntity<Cliente> buscarPorDni(@PathVariable String dni) {
+    public ClienteResponseDto buscarPorDni(@PathVariable String dni) {
         log.info("GET /api/clientes/dni/{}", dni);
-        Optional<Cliente> cliente = repository.findByDni(dni);
-        return cliente.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return service.buscarPorDni(dni);
     }
 }
+
 
 

@@ -1,26 +1,24 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.Usuario;
+
 import java.util.List;
 
+import ef.edu.cibertec.gestion.clientes.api.request.LoginRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.request.UsuarioRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.UsuarioResponseDto;
+
 public interface UsuarioService {
-	// Listar todos los usuarios
-    List<Usuario> listarUsuarios();
 
-    // Obtener un usuario por ID
-    Usuario obtenerUsuario(Integer id);
+    List<UsuarioResponseDto> listarUsuarios();
 
-    // Crear un nuevo usuario
-    Usuario crearUsuario(Usuario usuario);
+    UsuarioResponseDto obtenerUsuario(Integer id);
 
-    // Actualizar un usuario
-    Usuario actualizarUsuario(Integer id, Usuario usuarioActualizado);
+    UsuarioResponseDto crearUsuario(UsuarioRequestDto request);
 
-    // Eliminar un usuario
+    UsuarioResponseDto actualizarUsuario(Integer id, UsuarioRequestDto request);
+
     void eliminarUsuario(Integer id);
 
-    // Buscar un usuario por nombre
-    Usuario buscarPorNombre(String username);
+    UsuarioResponseDto buscarPorNombre(String username);
 
-    // Validar login
-    String login(Usuario loginRequest);
+    String login(LoginRequestDto loginRequest);
 }

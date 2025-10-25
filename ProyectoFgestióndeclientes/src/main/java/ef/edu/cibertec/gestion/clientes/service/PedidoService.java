@@ -1,25 +1,23 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.Pedido;
+
 import java.util.List;
+
+import ef.edu.cibertec.gestion.clientes.api.request.PedidoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.PedidoResponseDto;
+
 public interface PedidoService {
-	// Crear un nuevo pedido
-    Pedido crear(Pedido pedido);
 
-    // Listar todos los pedidos
-    List<Pedido> listar();
+    PedidoResponseDto crear(PedidoRequestDto request);
 
-    // Obtener un pedido por ID
-    Pedido obtenerPorId(Integer id);
+    List<PedidoResponseDto> listar();
 
-    // Listar pedidos por ID de cliente
-    List<Pedido> listarPorClienteId(Integer idCliente);
+    PedidoResponseDto obtener(Integer id);
 
-    // Listar pedidos por estado
-    List<Pedido> listarPorEstado(String estado);
+    List<PedidoResponseDto> listarPorClienteId(Integer idCliente);
 
-    // Actualizar un pedido
-    Pedido actualizar(Integer id, Pedido cambios);
+    List<PedidoResponseDto> listarPorEstado(String estado);
 
-    // Eliminar un pedido
+    PedidoResponseDto actualizar(Integer id, PedidoRequestDto request);
+
     void eliminar(Integer id);
 }

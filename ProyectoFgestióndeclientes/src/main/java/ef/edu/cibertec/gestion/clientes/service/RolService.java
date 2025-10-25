@@ -1,23 +1,22 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.Rol;
+
 import java.util.List;
 
+import ef.edu.cibertec.gestion.clientes.api.request.RolRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.RolResponseDto;
+
 public interface RolService {
-	// Listar todos los roles
-    List<Rol> listarRoles();
 
-    // Obtener un rol por ID
-    Rol obtenerRolPorId(Integer id);
+    List<RolResponseDto> listarRoles();
 
-    // Crear un nuevo rol
-    Rol crearRol(Rol rol);
+    RolResponseDto obtenerRolPorId(Integer id);
 
-    // Actualizar un rol
-    Rol actualizarRol(Integer id, Rol rol);
+    RolResponseDto crearRol(RolRequestDto request);
 
-    // Eliminar un rol
+    RolResponseDto actualizarRol(Integer id, RolRequestDto request);
+
     void eliminarRol(Integer id);
 
-    // Buscar un rol por nombre
-    Rol buscarPorNombre(String nombre);
+    RolResponseDto buscarPorNombre(String nombre);
 }
+

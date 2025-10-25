@@ -1,62 +1,66 @@
 package ef.edu.cibertec.gestion.clientes.service.impl;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import ef.edu.cibertec.gestion.clientes.api.request.PedidoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.PedidoResponseDto;
 import ef.edu.cibertec.gestion.clientes.entity.Pedido;
+import ef.edu.cibertec.gestion.clientes.mapper.PedidoMapper;
 import ef.edu.cibertec.gestion.clientes.repository.PedidoRepository;
 import ef.edu.cibertec.gestion.clientes.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class PedidoServiceImpl implements PedidoService {
 
-	private final PedidoRepository repository;
+    private final PedidoRepository repository;
+    private final PedidoMapper mapper;
 
     @Override
-    public Pedido crear(Pedido pedido) {
-        // Asignar fecha actual si no se proporciona
-        if (pedido.getFechaPedido() == null) {
-            pedido.setFechaPedido(LocalDateTime.now());
-        }
-        return repository.save(pedido);
+    public PedidoResponseDto crear(PedidoRequestDto request) {
+        Pedido entity = mapper.toEntity(request);
+        if (entity.getFechaPedido() == null) entity.setFechaPedido(LocalDateTime.now());
+        Pedido saved = repository.save(entity);
+        return mapper.toResponseDto(saved);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public List<PedidoResponseDto> listar() {
+        return mapper.toResponseList(repository.findAll());
+    }
+
+    @Override @Transactional(readOnly = true)
+    public PedidoResponseDto obtener(Integer id) {
+        Pedido p = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado: " + id));
+        return mapper.toResponseDto(p);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public List<PedidoResponseDto> listarPorClienteId(Integer idCliente) {
+        return repository.findByClienteId(idCliente).stream()
+                .map(mapper::toResponseDto).toList();
+    }
+
+    @Override @Transactional(readOnly = true)
+    public List<PedidoResponseDto> listarPorEstado(String estado) {
+        return repository.findByEstado(estado).stream()
+                .map(mapper::toResponseDto).toList();
     }
 
     @Override
-    public List<Pedido> listar() {
-        return repository.findAll();
-    }
-
-    @Override
-    public Pedido obtenerPorId(Integer id) {
-        Optional<Pedido> pedido = repository.findById(id);
-        return pedido.orElse(null);
-    }
-
-    @Override
-    public List<Pedido> listarPorClienteId(Integer idCliente) {
-        return repository.findByClienteId(idCliente);
-    }
-
-    @Override
-    public List<Pedido> listarPorEstado(String estado) {
-        return repository.findByEstado(estado);
-    }
-
-    @Override
-    public Pedido actualizar(Integer id, Pedido cambios) {
-        Optional<Pedido> pedidoExistente = repository.findById(id);
-        if (pedidoExistente.isPresent()) {
-            Pedido pedido = pedidoExistente.get();
-            pedido.setCliente(cambios.getCliente());
-            pedido.setEstado(cambios.getEstado());
-            pedido.setTotal(cambios.getTotal());
-            pedido.setDetalles(cambios.getDetalles());
-            return repository.save(pedido);
-        }
-        return null;
+    public PedidoResponseDto actualizar(Integer id, PedidoRequestDto request) {
+        Pedido actual = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado: " + id));
+        mapper.updateEntityFromDto(request, actual);
+        Pedido saved = repository.save(actual);
+        return mapper.toResponseDto(saved);
     }
 
     @Override
@@ -64,3 +68,4 @@ public class PedidoServiceImpl implements PedidoService {
         repository.deleteById(id);
     }
 }
+

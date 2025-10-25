@@ -1,75 +1,69 @@
 package ef.edu.cibertec.gestion.clientes.api;
 
-
-
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ef.edu.cibertec.gestion.clientes.entity.Rol;
-import ef.edu.cibertec.gestion.clientes.repository.RolRepository;
+import ef.edu.cibertec.gestion.clientes.api.request.RolRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.RolResponseDto;
+import ef.edu.cibertec.gestion.clientes.service.RolService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
 public class RolController {
 
-    private final RolRepository rolRepository;
+    private final RolService service;
 
-    // 🟢 Listar todos los roles
+    // Listar
     @GetMapping
-    public List<Rol> listarRoles() {
-        return rolRepository.findAll();
+    public List<RolResponseDto> listarRoles() {
+        log.info("GET /api/roles");
+        return service.listarRoles();
     }
 
-    // 🔵 Obtener un rol por ID
+    // Obtener por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Rol> obtenerRolPorId(@PathVariable Integer id) {
-        Optional<Rol> rol = rolRepository.findById(id);
-        return rol.map(ResponseEntity::ok)
-                  .orElseGet(() -> ResponseEntity.notFound().build());
+    public RolResponseDto obtenerRolPorId(@PathVariable Integer id) {
+        log.info("GET /api/roles/{}", id);
+        return service.obtenerRolPorId(id);
     }
 
-    // 🟡 Crear un nuevo rol
+    // Crear
     @PostMapping
-    public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
-        Rol nuevoRol = rolRepository.save(rol);
-        return new ResponseEntity<>(nuevoRol, HttpStatus.CREATED);
+    public ResponseEntity<RolResponseDto> crearRol(@Valid @RequestBody RolRequestDto request) {
+        log.info("POST /api/roles");
+        RolResponseDto saved = service.crearRol(request);
+        return ResponseEntity.created(URI.create("/api/roles/" + saved.getId())).body(saved);
     }
 
-    // 🟠 Actualizar un rol existente
+    // Actualizar
     @PutMapping("/{id}")
-    public ResponseEntity<Rol> actualizarRol(@PathVariable Integer id, @RequestBody Rol rol) {
-        return rolRepository.findById(id)
-                .map(existente -> {
-                    existente.setNombreRol(rol.getNombreRol());
-                    existente.setDescripcion(rol.getDescripcion());
-                    Rol actualizado = rolRepository.save(existente);
-                    return ResponseEntity.ok(actualizado);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public RolResponseDto actualizarRol(@PathVariable Integer id,
+                                        @Valid @RequestBody RolRequestDto request) {
+        log.info("PUT /api/roles/{}", id);
+        return service.actualizarRol(id, request);
     }
 
-    // 🔴 Eliminar un rol
+    // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarRol(@PathVariable Integer id) {
-        if (!rolRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        rolRepository.deleteById(id);
+        log.info("DELETE /api/roles/{}", id);
+        service.eliminarRol(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 🟣 Buscar por nombre de rol
+    // Buscar por nombre
     @GetMapping("/buscar")
-    public ResponseEntity<Rol> buscarPorNombre(@RequestParam String nombre) {
-        Optional<Rol> rol = rolRepository.findByNombreRolIgnoreCase(nombre);
-        return rol.map(ResponseEntity::ok)
-                  .orElseGet(() -> ResponseEntity.notFound().build());
+    public RolResponseDto buscarPorNombre(@RequestParam String nombre) {
+        log.info("GET /api/roles/buscar?nombre={}", nombre);
+        return service.buscarPorNombre(nombre);
     }
 }
 

@@ -1,49 +1,54 @@
 package ef.edu.cibertec.gestion.clientes.service.impl;
+
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import ef.edu.cibertec.gestion.clientes.api.request.ProductoRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.ProductoResponseDto;
+import ef.edu.cibertec.gestion.clientes.entity.EstadoProducto;
 import ef.edu.cibertec.gestion.clientes.entity.Producto;
+import ef.edu.cibertec.gestion.clientes.mapper.ProductoMapper;
 import ef.edu.cibertec.gestion.clientes.repository.ProductoRepository;
 import ef.edu.cibertec.gestion.clientes.service.ProductoService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class ProductoServiceImpl implements ProductoService {
-	
-	
-	private final ProductoRepository repository;
+
+    private final ProductoRepository repository;
+    private final ProductoMapper mapper;
 
     @Override
-    public List<Producto> listarTodos() {
-        return repository.findAll();
+    public ProductoResponseDto crear(ProductoRequestDto request) {
+        Producto entity = mapper.toEntity(request);
+        Producto saved = repository.save(entity);
+        return mapper.toResponseDto(saved);
+    }
+
+    @Override @Transactional(readOnly = true)
+    public List<ProductoResponseDto> listar() {
+        return repository.findAll().stream().map(mapper::toResponseDto).toList();
+    }
+
+    @Override @Transactional(readOnly = true)
+    public ProductoResponseDto obtener(Integer id) {
+        Producto p = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + id));
+        return mapper.toResponseDto(p);
     }
 
     @Override
-    public Producto obtenerPorId(Integer id) {
-        Optional<Producto> producto = repository.findById(id);
-        return producto.orElse(null);
-    }
-
-    @Override
-    public Producto crear(Producto producto) {
-        return repository.save(producto);
-    }
-
-    @Override
-    public Producto actualizar(Integer id, Producto producto) {
-        Optional<Producto> productoExistente = repository.findById(id);
-        if (productoExistente.isPresent()) {
-            Producto existing = productoExistente.get();
-            existing.setNombre(producto.getNombre());
-            existing.setDescripcion(producto.getDescripcion());
-            existing.setPrecio(producto.getPrecio());
-            existing.setStock(producto.getStock());
-            existing.setEstado(producto.getEstado());
-            return repository.save(existing);
-        }
-        return null;
+    public ProductoResponseDto actualizar(Integer id, ProductoRequestDto request) {
+        Producto actual = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + id));
+        mapper.updateEntityFromDto(request, actual);
+        Producto saved = repository.save(actual);
+        return mapper.toResponseDto(saved);
     }
 
     @Override
@@ -51,14 +56,15 @@ public class ProductoServiceImpl implements ProductoService {
         repository.deleteById(id);
     }
 
-    @Override
-    public List<Producto> listarActivos() {
-        return repository.findByEstado("Activo");
+    @Override @Transactional(readOnly = true)
+    public List<ProductoResponseDto> listarActivos() {
+        return repository.findByEstado(EstadoProducto.Activo).stream()
+                .map(mapper::toResponseDto).toList();
     }
 
-    @Override
-    public List<Producto> findByRangoPrecio(double min, double max) {
-        return repository.findByRangoPrecio(min, max);
+    @Override @Transactional(readOnly = true)
+    public List<ProductoResponseDto> listarPorRangoPrecio(BigDecimal min, BigDecimal max) {
+        return repository.findByRangoPrecio(min, max).stream()
+                .map(mapper::toResponseDto).toList();
     }
-
 }

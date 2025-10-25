@@ -1,25 +1,22 @@
 package ef.edu.cibertec.gestion.clientes.service;
-import ef.edu.cibertec.gestion.clientes.entity.Direccion;
+
 import java.util.List;
+
+import ef.edu.cibertec.gestion.clientes.api.request.DireccionRequestDto;
+import ef.edu.cibertec.gestion.clientes.api.response.DireccionResponseDto;
+
 public interface DireccionService {
-	
-	
-	// Crear una nueva dirección
-    Direccion crear(Direccion direccion);
 
-    // Listar todas las direcciones
-    List<Direccion> listar();
+    DireccionResponseDto crear(DireccionRequestDto request);
 
-    // Obtener una dirección por ID
-    Direccion obtenerPorId(Integer id);
+    List<DireccionResponseDto> listar();
 
-    // Listar direcciones por ID de cliente
-    List<Direccion> listarPorClienteId(Integer idCliente);
+    DireccionResponseDto obtener(Integer id);
 
-    // Actualizar una dirección
-    Direccion actualizar(Integer id, Direccion cambios);
+    List<DireccionResponseDto> listarPorClienteId(Integer idCliente);
 
-    // Eliminar una dirección
+    DireccionResponseDto actualizar(Integer id, DireccionRequestDto request);
+
     void eliminar(Integer id);
-
 }
+
