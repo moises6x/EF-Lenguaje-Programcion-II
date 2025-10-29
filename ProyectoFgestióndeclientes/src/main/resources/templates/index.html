@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tienda | Inicio</title>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- CSS propio -->
+  <link rel="stylesheet" th:href="@{/css/index.css}" href="/css/index.css">
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div>Envíos a todo el país · Cambios y devoluciones fáciles</div>
+      <div><a href="#">Ayuda</a> · <a href="#">Seguimiento</a></div>
+    </div>
+  </div>
+
+  <!-- Header principal -->
+  <header class="header">
+    <div class="wrap">
+      <a class="logo" href="/" th:href="@{/}">
+        <span class="dot"></span>
+        <span>MiTienda</span>
+      </a>
+      <form class="search" onsubmit="return false">
+        <input id="q" placeholder="Busca: zapatillas, TV, perfumes…" />
+        <button id="btnSearch">Buscar</button>
+      </form>
+      <div class="actions">
+         
+		<div class="dropdown">
+		  <button class="icon-btn dropdown-toggle" id="accountMenu"
+		          data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+		    <span>Cuenta</span>
+		  </button>
+		  <ul class="dropdown-menu dropdown-menu-end account-dd" aria-labelledby="accountMenu">
+		    <li>
+		      <a class="dropdown-item" th:href="@{/login}" href="/login">
+		        <!-- opcional: icono -->
+		        <span>Iniciar sesión</span>
+		      </a>
+		    </li>
+		    <li>
+		      <a class="dropdown-item" th:href="@{/registro}" href="/registro">
+		        <span>Crear cuenta</span>
+		      </a>
+		    </li>
+		  </ul>
+		</div>
+ 
+		
+        <button class="icon-btn" id="btnCart" aria-label="Carrito">
+          <span>🛍️</span><span>Carrito</span>
+          <span class="badge" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+    <nav class="mega">
+      <div class="wrap">
+        <a href="#">Moda</a>
+        <a href="#">Tecnología</a>
+        <a href="#">Hogar</a>
+        <a href="#">Belleza</a>
+        <a href="#">Deportes</a>
+        <a href="#">Bazaar</a>
+        <a href="#">Ofertas</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero / Slider -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="slider" id="slider">
+        <div class="slide bg1 active">
+          <div class="caption">
+            <span class="pill">Electro · Hasta 40% dscto</span>
+            <h2>Smart TVs para tu casa</h2>
+            <p>Descubre las mejores marcas y accesorios compatibles.</p>
+            <a class="cta" href="#productos">Ver productos</a>
+          </div>
+        </div>
+        <div class="slide bg2">
+          <div class="caption">
+            <span class="pill">Moda</span>
+            <h2>Temporada nueva, looks nuevos</h2>
+            <p>Estrena prendas con descuentos solo por hoy.</p>
+            <a class="cta" href="#catalogos">Ver catálogo</a>
+          </div>
+        </div>
+        <div class="slide bg3">
+          <div class="caption">
+            <span class="pill">Belleza</span>
+            <h2>Fragancias favoritas</h2>
+            <p>Perfumes originales en hasta 12 cuotas.</p>
+            <a class="cta" href="#productos">Comprar ahora</a>
+          </div>
+        </div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strip beneficios -->
+  <div class="strip">
+    <div class="wrap">
+      <div class="chip">🚚 Envío gratis desde S/ 199</div>
+      <div class="chip">💳 Hasta 12 cuotas</div>
+      <div class="chip">🔁 Devoluciones sin costo</div>
+      <div class="chip">🏬 Retiro en tienda</div>
+    </div>
+  </div>
+
+  <!-- Productos destacados -->
+  <section id="productos" class="section">
+    <h3>Destacados de la semana</h3>
+    <div class="grid" id="gridProducts"><!-- JS inyecta cards --></div>
+  </section>
+
+  <!-- Banners de catálogo -->
+  <section id="catalogos" class="section">
+    <div class="banners">
+      <a class="banner" href="#">
+        <img src="/img/banner1.jpg" alt="Catálogo moda" onerror="this.style.display='none'">
+        <div class="cap"><h4>Catálogo Moda · Ver más</h4></div>
+      </a>
+      <a class="banner" href="#">
+        <img src="/img/banner2.jpg" alt="Hogar y deco" onerror="this.style.display='none'">
+        <div class="cap"><h4>Hogar & Deco</h4></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Marcas -->
+  <section class="section">
+    <h3>Marcas que amamos</h3>
+    <div class="brands">
+      <div class="brand-pill">Brand A</div>
+      <div class="brand-pill">Brand B</div>
+      <div class="brand-pill">Brand C</div>
+      <div class="brand-pill">Brand D</div>
+      <div class="brand-pill">Brand E</div>
+      <div class="brand-pill">Brand F</div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  
+  <section class="newsletter">
+    <div class="wrap">
+      <div class="row align-items-start gy-4">
+        <!-- Texto lateral -->
+        <div class="col-12 col-lg-5">
+          <h3 class="nl-title mb-2">¡Únete y recibe ofertas exclusivas!</h3>
+          <p class="nl-sub mb-0">
+            Te enviaremos novedades, cupones y lanzamientos. Cancela cuando quieras.
+          </p>
+        </div>
+
+        <!-- Formulario -->
+        <div class="col-12 col-lg-7">
+          <div class="newsletter-card p-3 p-md-4">
+            <form id="nlForm" class="row g-3" novalidate>
+              <!-- Nombre / Teléfono -->
+              <div class="col-md-6">
+                <label for="nlNombre" class="form-label">Nombre*</label>
+                <input id="nlNombre" name="nombre" type="text" class="form-control" placeholder="Tu nombre" required>
+                <small class="nl-err" data-for="nlNombre"></small>
+              </div>
+              <div class="col-md-6">
+                <label for="nlTelefono" class="form-label">Teléfono</label>
+                <input id="nlTelefono" name="telefono" type="tel" class="form-control" placeholder="Opcional">
+                <small class="nl-err" data-for="nlTelefono"></small>
+              </div>
+
+              <!-- Email -->
+              <div class="col-12">
+                <label for="nlEmail" class="form-label">Correo electrónico*</label>
+                <input id="nlEmail" name="email" type="email" class="form-control" placeholder="tu@correo.com" required>
+                <small class="nl-err" data-for="nlEmail"></small>
+              </div>
+
+              <!-- Intereses -->
+              <div class="col-12">
+                <label class="form-label d-block mb-2">Intereses</label>
+                <div class="nl-tags">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="intereses" id="intTec" value="Tecnología">
+                    <label class="form-check-label" for="intTec">Tecnología</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="intereses" id="intModa" value="Moda">
+                    <label class="form-check-label" for="intModa">Moda</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="intereses" id="intHogar" value="Hogar">
+                    <label class="form-check-label" for="intHogar">Hogar</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="intereses" id="intBelleza" value="Belleza">
+                    <label class="form-check-label" for="intBelleza">Belleza</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="intereses" id="intDeportes" value="Deportes">
+                    <label class="form-check-label" for="intDeportes">Deportes</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Términos -->
+              <div class="col-12">
+                <div class="form-check">
+                  <input id="nlTyc" type="checkbox" class="form-check-input" required>
+                  <label class="form-check-label" for="nlTyc">
+                    Acepto los <a href="#" target="_blank">Términos y condiciones</a> y la <a href="#" target="_blank">Política de privacidad</a>.
+                  </label>
+                </div>
+                <small class="nl-err" data-for="nlTyc"></small>
+              </div>
+
+              <!-- Botón + Mensaje -->
+              <div class="col-12 d-flex align-items-center gap-3">
+                <button id="nlBtn" type="submit" class="btn primary px-4">Suscribirme</button>
+                <span id="nlMsg" class="nl-msg" role="status" aria-live="polite"></span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>    
+    </div>
+  </section>
+
+
+  
+  
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div>
+        <div class="logo" style="color:#fff"><span class="dot"></span><span>MiTienda</span></div>
+        <p style="color:#cbd5e1">Tu retail favorito online. Atención 24/7.</p>
+      </div>
+      <div>
+        <h5>Ayuda</h5>
+        <a href="#">Centro de ayuda</a>
+        <a href="#">Cambios y devoluciones</a>
+        <a href="#">Tiempos de entrega</a>
+      </div>
+      <div>
+        <h5>Nosotros</h5>
+        <a href="#">Quiénes somos</a>
+        <a href="#">Trabaja con nosotros</a>
+        <a href="#">Sostenibilidad</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a href="#">Términos y condiciones</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+    <div class="copyright">© <span id="year"></span> MiTienda. Todos los derechos reservados . Moises Camargo Ruiz  .</div>
+  </footer>
+  <!-- Carrito (Offcanvas) -->
+  <div class="offcanvas offcanvas-end cart-drawer" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="cartDrawerLabel">Tu carrito</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+      <!-- Lista de ítems -->
+      <div id="cartList" class="cart-list">
+        <!-- JS inyecta aquí -->
+      </div>
+
+      <!-- Resumen / Acciones -->
+      <div class="mt-auto cart-summary">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Subtotal</span>
+          <strong id="cartSubtotal">S/ 0.00</strong>
+        </div>
+        <div class="d-grid gap-2">
+          <button id="btnCheckout" class="btn primary">Continuar compra</button>
+          <button id="btnClearCart" class="btn ghost">Vaciar carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS propio -->
+  <script th:src="@{/js/index.js}" src="/js/index.js"></script>
+</body>
+</html>

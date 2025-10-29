@@ -1,0 +1,398 @@
+:root{
+  --bg:#0f0f12; --bg-2:#121318; --card:#ffffff; --ink:#111214; --ink-2:#2a2e35;
+  --muted:#6b7280; --brand:#ff1684; --brand-2:#8c00ff; --line:#e7e9ee;
+}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink)}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* Topbar */
+.topbar{background:var(--bg);color:#fff;font-size:.85rem}
+.topbar .wrap{max-width:1200px;margin:auto;padding:.45rem 1rem;display:flex;gap:1rem;justify-content:space-between;align-items:center}
+.topbar a{opacity:.9}.topbar a:hover{opacity:1}
+
+/* Header */
+.header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+.header .wrap{max-width:1200px;margin:auto;padding:.85rem 1rem;display:grid;grid-template-columns:170px 1fr 240px;gap:1rem;align-items:center}
+.logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1.25rem}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+.search{display:flex}
+.search input{width:100%;padding:.8rem 1rem;border:1px solid var(--line);border-right:none;border-radius:10px 0 0 10px;outline:none}
+.search button{padding:.8rem 1rem;border:1px solid var(--line);border-left:none;border-radius:0 10px 10px 0;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:600}
+.actions{display:flex;justify-content:flex-end;gap:.75rem}
+.icon-btn{position:relative;border:1px solid var(--line);padding:.65rem .8rem;border-radius:10px;background:#fff;display:flex;align-items:center;gap:.5rem;font-weight:600}
+.icon-btn .badge{position:absolute;top:-8px;right:-8px;background:var(--brand);color:#fff;border-radius:999px;font-size:.7rem;padding:.15rem .4rem}
+nav.mega{border-bottom:1px solid var(--line);background:#fff}
+.mega .wrap{max-width:1200px;margin:auto;display:flex;gap:1rem;padding:.6rem 1rem;overflow:auto}
+.mega a{padding:.5rem .75rem;border-radius:8px;color:var(--ink-2)}
+.mega a:hover{background:#f6f7fb}
+
+/* Hero / slider */
+.hero{background:var(--bg-2);color:#fff}
+.hero .wrap{max-width:1200px;margin:auto;padding:1rem}
+.slider{position:relative;border-radius:16px;overflow:hidden}
+.slide{height:380px;display:none;position:relative}
+.slide.active{display:block}
+.slide .caption{position:absolute;left:5%;top:10%;max-width:420px}
+.slide .caption h2{font-size:2.2rem;margin:.25rem 0}
+.pill{display:inline-flex;align-items:center;gap:.4rem;background:#ffffff1a;color:#fff;border:1px solid #ffffff33;padding:.35rem .6rem;border-radius:999px;font-size:.8rem}
+.cta{display:inline-block;margin-top:1rem;background:#fff;color:#111;font-weight:700;padding:.8rem 1rem;border-radius:10px}
+.dots{position:absolute;bottom:12px;left:0;right:0;display:flex;gap:.4rem;justify-content:center}
+.dot{width:8px;height:8px;border-radius:50%;background:#ffffff66}
+.dot.active{background:#fff}
+.slide.bg1{background:linear-gradient(90deg,#0f0f12 0%,#1a0930 100%), url('/img/hero1.jpg') center/cover no-repeat}
+.slide.bg2{background:linear-gradient(90deg,#0f0f12 0%,#3d081c 100%), url('/img/hero2.jpg') center/cover no-repeat}
+.slide.bg3{background:linear-gradient(90deg,#0f0f12 0%,#0a1d3a 100%), url('/img/hero3.jpg') center/cover no-repeat}
+
+/* Strips */
+.strip{background:#fff;border-bottom:1px solid var(--line)}
+.strip .wrap{max-width:1200px;margin:auto;padding:.8rem 1rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:space-between}
+.chip{display:flex;align-items:center;gap:.5rem;background:#f7f7fb;padding:.5rem .75rem;border-radius:999px;color:#222}
+
+/* Productos */
+.section{max-width:1200px;margin:2rem auto;padding:0 1rem}
+.section h3{margin:.25rem 0 1rem;font-size:1.4rem}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+@media (max-width:1200px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:920px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.card .thumb{aspect-ratio:1/1;background:#f5f6fa;display:flex;align-items:center;justify-content:center}
+.card .thumb img{max-height:88%}
+.card .info{padding:.8rem}
+.brand{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.title{font-weight:600;min-height:44px}
+.price{display:flex;align-items:baseline;gap:.45rem;margin:.35rem 0}
+.price .now{font-weight:800}
+.price .old{color:var(--muted);text-decoration:line-through}
+.badge-off{align-self:flex-start;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-size:.75rem;padding:.2rem .45rem;border-radius:8px;margin:.6rem}
+.buy{margin-top:auto;padding:.8rem;border-top:1px solid var(--line);display:flex;gap:.6rem}
+.btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border-radius:10px;padding:.65rem .8rem;font-weight:700}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff}
+.btn.ghost{border:1px solid var(--line);background:#fff}
+
+/* Banners catálogo */
+.banners{display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+@media (max-width:920px){.banners{grid-template-columns:1fr}}
+.banner{border-radius:16px;overflow:hidden;position:relative;background:#111;color:#fff;min-height:220px}
+.banner img{width:100%;height:100%;object-fit:cover;opacity:.9}
+.banner .cap{position:absolute;inset:auto 0 0 0;padding:1rem;background:linear-gradient(180deg,transparent,rgba(0,0,0,.6))}
+.banner .cap h4{margin:0}
+
+/* Marcas */
+.brands{display:flex;gap:1rem;overflow:auto;padding-bottom:.25rem}
+.brand-pill{min-width:110px;border:1px solid var(--line);border-radius:999px;background:#fff;padding:.6rem .9rem;display:flex;align-items:center;justify-content:center}
+
+/* Newsletter */
+.newsletter{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.newsletter .wrap{max-width:1200px;margin:auto;padding:1.25rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.newsletter input{padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;min-width:260px}
+.newsletter button{padding:.8rem 1rem;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:700;border:none}
+
+/* Footer */
+footer{background:var(--bg);color:#d1d5db;margin-top:2rem}
+footer .wrap{max-width:1200px;margin:auto;padding:2rem 1rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem}
+footer h5{margin:.2rem 0 .8rem;color:#fff}
+footer a{display:block;color:#cbd5e1;margin:.25rem 0;font-size:.95rem}
+.copyright{border-top:1px solid #ffffff1f;padding:1rem;text-align:center;color:#9ca3af}
+
+/* Dropdown "Cuenta" */
+.icon-btn.dropdown-toggle::after{ display:none; } /* ocultar caret default */
+.account-dd{
+  --dd-bg:#fff;
+  --dd-border: var(--line);
+  --dd-ink: var(--ink);
+  --dd-hover:#f6f7fb;
+  --dd-shadow: 0 10px 30px rgba(17,18,20,.08);
+  border:1px solid var(--dd-border);
+  background:var(--dd-bg);
+  color:var(--dd-ink);
+  border-radius:12px;
+  padding:.4rem;
+  min-width: 220px;
+  box-shadow: var(--dd-shadow);
+}
+.account-dd .dropdown-item{
+  border-radius:10px;
+  padding:.6rem .8rem;
+  font-weight:600;
+}
+.account-dd .dropdown-item:hover{ background:var(--dd-hover); }
+.account-dd .dropdown-item:active{
+  background: linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:#fff;
+}
+
+/* Drawer de carrito */
+.cart-drawer{width:min(520px, 95vw); border-left:1px solid var(--line); background:#fff}
+.cart-drawer .offcanvas-header{border-bottom:1px solid var(--line)}
+.cart-list{display:flex; flex-direction:column; gap:.75rem}
+
+/* Card de ítem en carrito */
+.cart-item{
+  display:grid; grid-template-columns:72px 1fr auto; gap:.75rem;
+  border:1px solid var(--line); border-radius:12px; padding:.6rem; background:#fff;
+}
+.cart-thumb{
+  width:72px; height:72px; border-radius:10px; background:#f5f6fa;
+  display:flex; align-items:center; justify-content:center; overflow:hidden
+}
+.cart-thumb img{max-width:100%; max-height:100%}
+.cart-title{font-weight:600; line-height:1.2}
+.cart-meta{font-size:.9rem; color:var(--muted)}
+.cart-actions{display:flex; align-items:center; gap:.5rem}
+.cart-remove{border:1px solid var(--line); background:#fff; border-radius:10px; padding:.35rem .6rem}
+.cart-summary{border-top:1px solid var(--line); padding-top:1rem}
+
+/* Newsletter (form completo) */
+.newsletter { background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.newsletter .wrap { max-width:1200px; margin:auto; padding:1.5rem 1rem; display:grid; grid-template-columns: 1fr 1.4fr; gap:1.25rem; align-items:start; }
+@media (max-width:920px){ .newsletter .wrap { grid-template-columns:1fr; } }
+
+.nl-left .nl-title { margin:0 0 .25rem; font-size:1.4rem; }
+.nl-left .nl-sub { margin:0; color:var(--muted); }
+
+.nl-form { display:flex; flex-direction:column; gap:.9rem; }
+.nl-row { display:flex; gap:.9rem; flex-wrap:wrap; }
+.nl-field { flex:1; min-width:220px; display:flex; flex-direction:column; gap:.35rem; }
+.nl-field-full { flex-basis:100%; }
+.nl-field label { font-weight:600; font-size:.95rem; }
+.nl-field input[type="text"],
+.nl-field input[type="tel"],
+.nl-field input[type="email"] {
+  padding:.8rem 1rem; border:1px solid var(--line); border-radius:10px; outline:none;
+}
+.nl-tags { display:flex; gap:.6rem 1rem; flex-wrap:wrap; }
+.nl-tags label { display:flex; align-items:center; gap:.35rem; font-weight:500; }
+
+.nl-terms { font-size:.95rem; display:flex; align-items:center; gap:.5rem; }
+.nl-terms a { color:var(--brand-2); text-decoration:underline; }
+
+.nl-actions { display:flex; align-items:center; gap:.8rem; }
+.nl-msg { color:var(--muted); font-size:.95rem; }
+.nl-err { color:#b91c1c; min-height:1.1em; font-size:.85rem; }
+
+.newsletter .btn.primary[disabled] { opacity:.7; cursor:not-allowed; }
+
+/* =========================================================
+   NEWSLETTER — ESTILOS LIMPIOS Y COMPATIBLES CON BOOTSTRAP
+   (Pegar al FINAL de tu hoja de estilos)
+   ========================================================= */
+.newsletter { 
+  background:#fff !important; 
+  border-top:1px solid var(--line, #e7e9ee) !important; 
+  border-bottom:1px solid var(--line, #e7e9ee) !important; 
+}
+.newsletter .wrap{
+  /* No usar display:grid aquí si dentro hay .row de Bootstrap */
+  display:block !important;
+  max-width:1200px !important;
+  margin:auto !important;
+  padding:2rem 1rem !important;
+}
+
+/* Tarjeta contenedora del formulario */
+.newsletter-card{
+  background:#fff;
+  border:1px solid var(--line, #e7e9ee);
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(17,18,20,.06);
+}
+
+/* Títulos y subtítulos */
+.newsletter .nl-title{
+  margin:0 0 .25rem;
+  font-size:1.4rem;
+  font-weight:800;
+  color:var(--ink, #111214);
+}
+.newsletter .nl-sub{
+  margin:0;
+  color:var(--muted, #6b7280);
+}
+
+/* ---- Formularios (Bootstrap friendly) ---- */
+.newsletter .form-label{
+  font-weight:600;
+  color:var(--ink, #111214);
+  margin-bottom:.35rem;
+}
+.newsletter .form-control{
+  padding:.8rem 1rem;
+  border:1px solid var(--line, #e7e9ee);
+  border-radius:10px;
+  outline:none;
+  background:#fff;
+}
+.newsletter .form-control:focus{
+  border-color:#c2b7ff;
+  box-shadow:0 0 0 .2rem rgba(140,0,255,.08);
+}
+
+/* Checkboxes de intereses y TyC */
+.newsletter .form-check-input{ cursor:pointer; }
+.newsletter .form-check-input:focus{ box-shadow:0 0 0 .2rem rgba(140,0,255,.16); }
+.newsletter .form-check-label{ font-weight:500; }
+
+/* Grupo inline de intereses (envoltorio visual) */
+.newsletter .nl-tags{
+  display:flex;
+  gap:.6rem 1rem;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+/* Errores y mensajes del JS */
+.newsletter .nl-err{
+  color:#b91c1c;
+  min-height:1.1em;
+  font-size:.85rem;
+  display:block;
+  margin-top:.25rem;
+}
+.newsletter .nl-msg{
+  color:var(--muted, #6b7280);
+  font-size:.95rem;
+}
+
+/* Botón primario del newsletter (reutiliza tu .btn.primary) */
+.newsletter .btn.primary{
+  border:none;
+  border-radius:10px;
+  padding:.75rem 1.1rem;
+  background:linear-gradient(135deg, var(--brand, #ff1684), var(--brand-2, #8c00ff));
+  color:#fff;
+  font-weight:700;
+}
+.newsletter .btn.primary[disabled]{ opacity:.7; cursor:not-allowed; }
+
+/* ---- Espaciado responsive ---- */
+@media (max-width:1200px){
+  .newsletter .wrap{ padding:1.75rem 1rem !important; }
+}
+@media (max-width:992px){
+  .newsletter .wrap{ padding:1.5rem 1rem !important; }
+}
+
+/* ---- Enlaces dentro del texto ---- */
+.newsletter a{ color:var(--brand-2, #8c00ff); text-decoration:underline; }
+.newsletter a:hover{ opacity:.9; }
+
+/* =========================================================
+   FIN — NEWSLETTER
+   ========================================================= */
+
+/* ========= Fix checkboxes newsletter ========= */
+
+/* 1) No aplicar estilos de inputs de texto a los checkbox */
+.newsletter input[type="checkbox"]{
+  all: revert;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 .4rem 0 0 !important;
+  border: initial !important;
+  background: initial !important;
+  box-shadow: none !important;
+  display: inline-block !important;
+  accent-color: var(--brand-2, #8c00ff);
+}
+
+/* 2) Intereses en una sola línea, con chips ordenados */
+.newsletter .nl-tags{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: .5rem 1rem !important;
+  align-items: center;
+  margin-top: .25rem;
+}
+
+/* 3) Cada opción de interés estilo compacto inline */
+.newsletter .nl-tags .form-check{
+  display: inline-flex !important;
+  align-items: center;
+  gap: .35rem;
+  padding: .25rem .6rem;
+  border: 1px solid var(--line, #e7e9ee);
+  border-radius: 999px;
+  background: #fff;
+  line-height: 1;
+}
+
+/* Quitar el ancho completo que a veces viene de Bootstrap */
+.newsletter .nl-tags .form-check-input{
+  float: none;
+  margin: 0 !important;
+}
+.newsletter .nl-tags .form-check-label{
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink, #111214);
+  white-space: nowrap;
+}
+
+/* 4) Bloque de Términos: checkbox pequeño y texto debajo de intereses */
+.newsletter .form-check{
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+}
+.newsletter #nlTyc{ margin-top: .2rem !important; }
+
+/* 5) Espaciado vertical entre secciones y botón */
+.newsletter .nl-title{ margin-bottom: .5rem; }
+.newsletter .nl-sub{ margin-bottom: 0; }
+.newsletter .nl-err{ margin-top: .25rem; }
+.newsletter .nl-msg{ margin-left: .25rem; }
+.newsletter .nl-actions{ margin-top: .25rem; }
+
+/* 6) Asegurar que inputs de texto mantengan su estilo */
+.newsletter .form-control{
+  padding:.8rem 1rem;
+  border:1px solid var(--line, #e7e9ee);
+  border-radius:10px;
+  background:#fff;
+}
+.newsletter .form-control:focus{
+  border-color:#c2b7ff;
+  box-shadow:0 0 0 .2rem rgba(140,0,255,.08);
+}
+
+
+/* ===========================
+   FIX RESPONSIVE HEADER + OVERFLOW
+   (añadido)
+   =========================== */
+
+/* Hasta tablets medianas, compactar cabecera */
+@media (max-width: 992px){
+  .header .wrap{
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo actions"
+      "search search";
+    align-items: center;
+  }
+  .logo{ grid-area: logo; }
+  .actions{ grid-area: actions; gap:.5rem; }
+  .search{ grid-area: search; width:100%; }
+  .search input{ width:100%; }
+}
+
+/* En móviles pequeños: ocultar texto de botones, evitar ensanchar */
+@media (max-width: 576px){
+  .header .wrap{ grid-template-columns: 1fr auto; gap:.5rem; }
+  .icon-btn{ padding:.55rem .6rem; white-space:nowrap; }
+  .icon-btn span:nth-child(2){ display:none; } /* oculta "Cuenta"/"Carrito" */
+}
+
+/* Ultra-pequeños: 1 columna de productos */
+@media (max-width:360px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+/* Freno global a desplazamiento lateral por 1–2px de desborde */
+html, body{ overflow-x: hidden; }
+

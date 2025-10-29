@@ -1,0 +1,63 @@
+/* =============== Layout base =============== */
+.login-split {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;            /* evita scroll durante el swap */
+  background: radial-gradient(60% 60% at 20% 20%, #f8f9fa 0%, #eef2f6 100%);
+}
+
+.panel {
+  flex: 1 1 50%;
+  position: relative;
+  transition: transform .9s cubic-bezier(.22,.61,.36,1); /* animación fluida */
+  will-change: transform;
+}
+
+/* =============== Panel izquierdo (form) =============== */
+.panel-left { padding: 24px; }
+
+/* Tarjeta del formulario (más grande) */
+.form-card {
+  width: 100%;
+  max-width: 520px;            /* antes 380px */
+  border-radius: 18px;
+  transition: transform .9s cubic-bezier(.22,.61,.36,1), box-shadow .3s;
+  will-change: transform;
+}
+
+/* Inputs grandes con esquinas suaves */
+.form-control-lg,
+.input-group-lg > .form-control,
+.input-group-lg > .btn {
+  border-radius: 10px;
+}
+
+/* =============== Panel derecho (imagen) =============== */
+.panel-right .bg-img {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_23-2150512701.jpg?semt=ais_hybrid&w=740&q=80');  /* pon tu imagen en static/img/login.jpg */
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05);
+}
+
+/* =============== SWAP (éxito): cruzar paneles =============== */
+.login-split.swap .panel-left  { transform: translateX(100%); }  /* form -> derecha  */
+.login-split.swap .panel-right { transform: translateX(-100%); } /* img  -> izquierda */
+
+/* Ligero parallax de la tarjeta al moverse */
+.login-split.swap .form-card { transform: translateX(10%); }
+
+/* =============== Responsive =============== */
+@media (max-width: 992px) {
+  .login-split { flex-direction: column; }
+  .panel       { flex: 0 0 auto; width: 100%; transition: none; transform: none !important; }
+  .panel-right { height: 35vh; order: -1; }
+  .login-split.swap .form-card { transform: none; }
+}
+
+/* Detalles menores */
+#forgotLink { opacity: .8; }
+#forgotLink:hover { opacity: 1; }
